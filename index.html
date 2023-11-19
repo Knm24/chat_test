@@ -74,7 +74,7 @@ function sendMessage() {
 
 function loadChat() {
   const chatBox = document.getElementById("chat-box");
-
+  chatBox.value = '';
   // Select all message from DB
   const query = new Parse.Query(Message);
   query.find().then(messages => {
