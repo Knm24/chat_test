@@ -62,7 +62,7 @@ function sendMessage() {
   // save db
   message.save().then(() => {
     // Add message to chat
-    chatBox.innerHTML += `<p><strong>${name}:</strong> ${messageText}</p>`;
+    loadChat();
 
     // clear files
     nameInput.value = "";
