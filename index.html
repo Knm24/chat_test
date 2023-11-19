@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Back4App Chat</title>
+  <script src="https://www.parsecdn.com/js/parse-1.18.1.min.js" defer></script>
+  <style>
+    #chat-box {
+      height: 200px;
+      overflow-y: scroll;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+
+    #message-input, #name-input {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<label for="name-input">Your name:</label>
+<input type="text" id="name-input" placeholder="Enter name">
+<br>
+<input type="text" id="message-input" placeholder="Enter message">
+<div id="chat-box"></div>
+<button onclick="sendMessage()">Send</button>
+
+<script defer>
+Parse.initialize("MzcOsmBTMETfjQsxh8TJvRRiQcwlidjO0z8yPQdN", "NpKa218COIgb518wCw9GwnUeVBZW0RgtyBhA5JVw");
+Parse.serverURL = 'https://parseapi.back4app.com/';
+
+const Message = Parse.Object.extend("Message");
+
+document.addEventListener("DOMContentLoaded", function() {
+  // Load chat
+  loadChat();
+});
+
+function sendMessage() {
+  const nameInput = document.getElementById("name-input");
+  const messageInput = document.getElementById("message-input");
+  const chatBox = document.getElementById("chat-box");
+
+  const name = nameInput.value;
+  const messageText = messageInput.value;
+
+  if (name.trim() === "" || messageText.trim() === "") {
+    alert("Enter name and message cannot be empty");
+    return;
+  }
+
+  // create obj Message
+  const message = new Message();
+  message.set("name", name);
+  message.set("text", messageText);
+
+  // save db
+  message.save().then(() => {
+    // Add message to chat
+    chatBox.innerHTML += `<p><strong>${name}:</strong> ${messageText}</p>`;
+
+    // clear files
+    nameInput.value = "";
+    messageInput.value = "";
+  }).catch(error => {
+    console.error("Error sending message:", error);
+  });
+}
+
+function loadChat() {
+  const chatBox = document.getElementById("chat-box");
+
+  // Select all message from DB
+  const query = new Parse.Query(Message);
+  query.find().then(messages => {
+    // Show message
+    messages.forEach(message => {
+      chatBox.innerHTML += `<p><strong>${message.get("name")}:</strong> ${message.get("text")}</p>`;
+    });
+  }).catch(error => {
+    console.error("Error loading chat:", error);
+  });
+}
+</script>
+
+</body>
+</html>
