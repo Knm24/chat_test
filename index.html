@@ -88,5 +88,16 @@ function loadChat() {
 }
 </script>
 
+
+<button onclick="openCaptainMarvel()">Iframe tech - Open Captain Marvel</button>
+<iframe id="captainMarvelFrame" width="600" height="400"></iframe>
+
+<script>
+function openCaptainMarvel() {
+    var iframe = document.getElementById("captainMarvelFrame");
+    iframe.src = "https://www.marvel.com/captainmarvel/";
+}
+</script>
+  
 </body>
 </html>
